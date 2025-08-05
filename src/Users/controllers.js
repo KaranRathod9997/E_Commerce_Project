@@ -1,10 +1,11 @@
 const User = require('./model');
 
+
 // @desc   Get all users
 // @route  GET /api/users
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-password'); // Exclude password
+    const users = await User.find(); // Exclude password .select('-password')
     res.status(200).json({ data: users, msg: 'Users fetched successfully' });
   } catch (error) {
     console.error('[GetAllUsers]', error);

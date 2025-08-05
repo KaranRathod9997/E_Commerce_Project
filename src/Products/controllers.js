@@ -83,24 +83,26 @@ const addNewProduct = async (req, res) => {
             return res.status(400).json({
                 message: "Missing required fields: name, price, catagory, subcategory, and at least one color are required.",
             });
+        } else {
+            const newProduct = await Product.create({
+                name,
+                price,
+                ratting,
+                catagory,
+                subcategory,
+                discount,
+                discount_data,
+                color,
+                desc,
+            });
+
+            return res.status(201).json({
+                data: newProduct,
+                message: "Product created successfully",
+            });
         }
 
-        const newProduct = await Product.create({
-            name,
-            price,
-            ratting,
-            catagory,
-            subcategory,
-            discount,
-            discount_data,
-            color,
-            desc,
-        });
 
-        return res.status(201).json({
-            data: newProduct,
-            message: "Product created successfully",
-        });
     } catch (err) {
         console.error("Create error:", err);
         return res.status(500).json({

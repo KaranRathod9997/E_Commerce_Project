@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const authUser = require("../auth/middleware");
+
 
 const {
   fetchAllProducts,
@@ -11,22 +13,22 @@ const {
 
 // @route   GET /products
 // @desc    Fetch all products with optional filters
-router.get("/get_All_Products", fetchAllProducts);
+router.get("/get_All_Products", authUser, fetchAllProducts);
 
 // @route   GET /products/:id
 // @desc    Fetch a single product by ID
-router.get("/get_One_Products/:id", fetchProductById);
+router.get("/get_One_Products/:id", authUser, fetchProductById);
 
 // @route   POST /products
 // @desc    Create a new product
-router.post("/create_One_Products", addNewProduct);
+router.post("/create_One_Products", authUser, addNewProduct);
 
 // @route   PUT /products/:id
 // @desc    Update a product by ID
-router.put("/update_One_Products/:id", updateProduct);
+router.put("/update_One_Products/:id", authUser, updateProduct);
 
 // @route   DELETE /products/:id
 // @desc    Delete a product by ID
-router.delete("/delete_One_Products/:id", deleteProduct);
+router.delete("/delete_One_Products/:id", authUser, deleteProduct);
 
 module.exports = router;

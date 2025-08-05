@@ -1,8 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 
 const app = express();
-app.use(express.json());
+// app.use(express.json());
+app.use(cookieParser());
+app.use(session({
+  secret: "process.emv.session_secret_key",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { httpOnly: true, sameSite: "Lax" }
+}))
+
 const PORT = 8000;
 
 const productRoutes = require("./src/Products/routes");

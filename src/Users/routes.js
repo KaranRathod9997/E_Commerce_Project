@@ -1,4 +1,6 @@
 const express = require("express");
+const authUser = require("../auth/middleware");
+
 const router = express.Router();
 
 // Controller methods
@@ -13,12 +15,12 @@ const {
 router.get("/get_All_Users", getAllUsers);
 
 // @route   GET /api/users/:id
-router.get("/get_One_Users/:id", getUserById);
+router.get("/get_One_Users/:id", authUser, getUserById);
 
 // @route   PUT /api/users/:id
-router.put("/update_One_Users/:id", updateUser);
+router.put("/update_One_Users/:id", authUser, updateUser);
 
 // @route   DELETE /api/users/:id
-router.delete("/delete_One_Users/:id", deleteUser);
+router.delete("/delete_One_Users/:id", authUser, deleteUser);
 
 module.exports = router;
