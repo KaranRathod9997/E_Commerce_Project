@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const authUser = require("../auth/middleware");
-
 
 const {
   fetchAllProducts,
@@ -10,6 +8,8 @@ const {
   updateProduct,
   deleteProduct,
 } = require("./controllers"); //  Update the path accordingly
+const { authUser } = require("../auth/middleware");
+
 
 // @route   GET /products
 // @desc    Fetch all products with optional filters

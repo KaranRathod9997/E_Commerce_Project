@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
 const app = express();
-// app.use(express.json());
+app.use(express.json());
 app.use(cookieParser());
 app.use(session({
   secret: "process.emv.session_secret_key",
@@ -26,7 +26,7 @@ app.use("/routes", authRoutes);
 
 
 app.listen(PORT, async () => {
-  await mongoose.connect("mongodb://localhost:27017/Product_Project");
+  await mongoose.connect("mongodb://localhost:27017/Product_Project",{autoIndex:false});
   console.log("DB connected");
   console.log("Server started");
 });

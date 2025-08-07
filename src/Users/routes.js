@@ -1,5 +1,4 @@
 const express = require("express");
-const authUser = require("../auth/middleware");
 
 const router = express.Router();
 
@@ -10,9 +9,10 @@ const {
   updateUser,
   deleteUser,
 } = require("./controllers");
+const { authUser } = require("../auth/middleware");
 
 // @route   GET /api/users
-router.get("/get_All_Users", getAllUsers);
+router.get("/get_All_Users",  getAllUsers);
 
 // @route   GET /api/users/:id
 router.get("/get_One_Users/:id", authUser, getUserById);

@@ -11,7 +11,7 @@ const register = async (req, res) => {
 
   try {
     const newUser = await User.create({ username, email, password });
-    res.status(201).json({
+    return res.status(201).json({
       msg: "Account created successfully",
       user: {
         id: newUser._id,
@@ -21,48 +21,53 @@ const register = async (req, res) => {
     });
   } catch (err) {
     console.error("Registration Error:", err);
-    res.status(500).json({ msg: "Something went wrong while registering" });
+    return res.status(500).json({ msg: "Something went wrong while registering" });
   }
 };
 
-// Login user (basic, since no auth or bcrypt)
+// Login using session
 const login = async (req, res) => {
-  const { email, password } = req.body;
-
-  // Validate input
-  if (!email || !password) {
-    return res.status(400).json({ msg: "Email and password are required" });
-  }
-
   try {
-    const user = await User.findOne({ email });
-
-    if (!user || user.password !== password) {
-      return res.status(401).json({ msg: "Invalid credentials" });
+      if (!req.body) {
+      return res.status(400).json({ msg: "Missing request body" });
     }
+    const { identifier, password } = req.body;
 
-    res.status(200).json({
-      msg: "Logged in successfully",
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-      },
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
     });
-  } catch (err) {
-    console.error("Login Error:", err);
-    res.status(500).json({ msg: "Something went wrong while logging in" });
+
+    if (!user) return res.status(404).json({ msg: "User not found" });
+    if (user.password !== password)
+      return res.status(401).json({ msg: "Password incorrect" });
+
+    // Set session
+    req.session.user = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    };
+
+    return res.status(200).json({
+      msg: "Login successful",
+      user: req.session.user,
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).json({ msg: "Login failed", error });
   }
 };
 
-// Logout user
+// Logout
 const logout = (req, res) => {
   try {
-    // In stateless APIs, logout is usually frontend-based (just destroy token/cookie)
-    res.status(200).json({ msg: "You’ve been logged out" });
-  } catch (err) {
-    console.error("Logout Error:", err);
-    res.status(500).json({ msg: "Something went wrong while logging out" });
+    req.session.destroy(() => {
+      res.clearCookie("connect.sid");
+      return res.json({ msg: "Logout successful" });
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return res.status(500).json({ msg: "Logout failed", error });
   }
 };
 
