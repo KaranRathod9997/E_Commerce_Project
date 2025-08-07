@@ -4,33 +4,52 @@ const mongoose = require("mongoose");
 // * GET /products *
 // * Fetch all products with search, pagination, sorting *
 
+// const fetchAllProducts = async (req, res) => {
+//     try {
+//         const { search, sort = "name", page = 1, limit = 20 } = req.query;
+//         const query = search ? { name: { $regex: search, $options: "i" } } : {};
+
+//         const products = await Product.find(query)
+//             .sort(sort)
+//             .skip((page - 1) * limit)
+//             .limit(Number(limit));
+
+//         const total = await Product.countDocuments(query);
+
+//         return res.status(200).json({
+//             total,
+//             count: products.length,
+//             currentPage: Number(page),
+//             data: products,
+//             message: "Products retrieved successfully",
+//         });
+//     } catch (err) {
+//         console.error("Fetch error:", err);
+//         return res.status(500).json({
+//             message: "Failed to fetch products",
+//             error: err.message,
+//         });
+//     }
+// };
+
 const fetchAllProducts = async (req, res) => {
     try {
-        const { search, sort = "name", page = 1, limit = 20 } = req.query;
-        const query = search ? { name: { $regex: search, $options: "i" } } : {};
+        const products = await Product.find(); // saare products la lo
 
-        const products = await Product.find(query)
-            .sort(sort)
-            .skip((page - 1) * limit)
-            .limit(Number(limit));
-
-        const total = await Product.countDocuments(query);
-
-        return res.status(200).json({
-            total,
-            count: products.length,
-            currentPage: Number(page),
+        res.status(200).json({
+            total: products.length,
             data: products,
-            message: "Products retrieved successfully",
+            message: "All products fetched successfully",
         });
     } catch (err) {
         console.error("Fetch error:", err);
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to fetch products",
             error: err.message,
         });
     }
 };
+
 
 // * GET /products/:id *
 // * Fetch product by ID *
