@@ -1,3 +1,4 @@
+const User = require("../Users/model");
 const Product = require("./model");
 const mongoose = require("mongoose");
 
@@ -85,6 +86,13 @@ const fetchProductById = async (req, res) => {
 
 const addNewProduct = async (req, res) => {
     try {
+        console.log("req.body:", req.body);
+    console.log("req file:", req.file);
+
+    const user_id = req.user.id;
+    // console.log(user_id);
+
+    const user = await User.findById(user_id);
         const {
             name,
             price,
@@ -113,6 +121,7 @@ const addNewProduct = async (req, res) => {
                 discount_data,
                 color,
                 desc,
+                user:user_id
             });
 
             return res.status(201).json({

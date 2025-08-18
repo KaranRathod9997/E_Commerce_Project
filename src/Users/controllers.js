@@ -1,6 +1,5 @@
 const User = require('./model');
 
-
 // @desc   Get all users
 // @route  GET /api/users
 const getAllUsers = async (req, res) => {
