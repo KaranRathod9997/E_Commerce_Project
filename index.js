@@ -1,7 +1,8 @@
 const express = require("express");
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const database = require("./src/config/database");
 // const multer = require("multer");
 
 const app = express();
@@ -13,6 +14,8 @@ app.use(session({
   saveUninitialized: true,
   cookie: { httpOnly: true, sameSite: "Lax" }
 }))
+
+database();
 
 const PORT = 8000;
 
@@ -26,8 +29,6 @@ const authRoutes = require("./src/auth/routes");
 app.use("/routes", authRoutes);
 
 
-app.listen(PORT, async () => {
-  await mongoose.connect("mongodb://localhost:27017/Product_Project",{autoIndex:false});
-  console.log("DB connected");
-  console.log("Server started");
+app.listen(PORT, () => {
+   console.log("Server is running on port 8000");
 });

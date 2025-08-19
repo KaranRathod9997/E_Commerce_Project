@@ -15,8 +15,7 @@ const getAllUsers = async (req, res) => {
       email: user.email,
       totalProducts: user.product.length,
       products: user.product
-    }));
-
+    })); 
     res.status(200).json({ 
       total: result.length,
       data: result,
