@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+// const multer = require("multer");
 
 const app = express();
 app.use(express.json());

@@ -35,7 +35,7 @@ const mongoose = require("mongoose");
 
 const fetchAllProducts = async (req, res) => {
     try {
-        const products = await Product.find(); // saare products la lo
+        const products = await Product.find().populate("user","username email"); // saare products la lo
 
         res.status(200).json({
             total: products.length,
@@ -86,8 +86,8 @@ const fetchProductById = async (req, res) => {
 
 const addNewProduct = async (req, res) => {
     try {
-        console.log("req.body:", req.body);
-    console.log("req file:", req.file);
+    //     console.log("req.body:", req.body);
+    // console.log("req file:", req.file);
 
     const user_id = req.user.id;
     // console.log(user_id);
@@ -123,6 +123,9 @@ const addNewProduct = async (req, res) => {
                 desc,
                 user:user_id
             });
+            user.product.push(newProduct.id)
+            await user.save()
+            // newProduct.user.push(user_id)
 
             return res.status(201).json({
                 data: newProduct,

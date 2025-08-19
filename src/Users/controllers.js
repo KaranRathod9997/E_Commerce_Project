@@ -1,26 +1,55 @@
+const Product = require('../Products/model');
 const User = require('./model');
 
-// @desc   Get all users
+// @desc   Get all users with products + count
 // @route  GET /api/users
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find(); // Exclude password .select('-password')
-    res.status(200).json({ data: users, msg: 'Users fetched successfully' });
+    const users = await User.find()
+      .select('-password')
+      .populate("product", "name price"); // only product name & price 
+
+    const result = users.map(user => ({
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      totalProducts: user.product.length,
+      products: user.product
+    }));
+
+    res.status(200).json({ 
+      total: result.length,
+      data: result,
+      msg: 'Users fetched successfully' 
+    });
   } catch (error) {
     console.error('[GetAllUsers]', error);
     res.status(500).json({ msg: 'Internal server error' });
   }
 };
 
-// @desc   Get single user by ID
+// @desc   Get single user by ID with products + count
 // @route  GET /api/users/:id
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select('-password');
+    const user = await User.findById(req.params.id)
+      .select('-password')
+      .populate("product", "name price");
+
     if (!user) {
       return res.status(404).json({ msg: 'User not found' });
     }
-    res.status(200).json({ data: user, msg: 'User found' });
+
+    res.status(200).json({ 
+      data: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        totalProducts: user.product.length,
+        products: user.product
+      },
+      msg: 'User found' 
+    });
   } catch (error) {
     console.error('[GetUserById]', error);
     res.status(500).json({ msg: 'Internal server error' });

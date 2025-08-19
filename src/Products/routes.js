@@ -9,6 +9,8 @@ const {
   deleteProduct,
 } = require("./controllers"); //  Update the path accordingly
 const { authUser } = require("../auth/middleware");
+const upload = require("../config/multerconfig");
+// const multer = require("multer");
 
 
 // @route   GET /products
@@ -21,7 +23,7 @@ router.get("/get_One_Products/:id", authUser, fetchProductById);
 
 // @route   POST /products
 // @desc    Create a new product
-router.post("/create_One_Products", authUser, addNewProduct);
+router.post("/create_One_Products", authUser, upload.single("images"),addNewProduct);
 
 // @route   PUT /products/:id
 // @desc    Update a product by ID

@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema(
       minlength: [6, 'Password must be at least 6 characters long'],
       // select: false, //  Commented out if you want password to be visible in queries (optional)
     },
+    product: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }]
   },
   {
     timestamps: true, // createdAt and updatedAt will be added automatically

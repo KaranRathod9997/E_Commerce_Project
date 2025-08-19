@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 // * Product Schema - Defines a product *
 
 const productSchema = new mongoose.Schema(
@@ -72,7 +73,8 @@ const productSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    
   },
   // { timestamps: true }
 );
@@ -80,3 +82,5 @@ const productSchema = new mongoose.Schema(
 const Product = mongoose.model("Product", productSchema);
 
 module.exports = Product;
+
+
