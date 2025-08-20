@@ -2,7 +2,10 @@ const express = require("express");
 // const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const path = require("path");
+
 const database = require("./src/config/database");
+
 // const multer = require("multer");
 
 const app = express();
@@ -14,6 +17,10 @@ app.use(session({
   saveUninitialized: true,
   cookie: { httpOnly: true, sameSite: "Lax" }
 }))
+
+// ✅ Serve static files from /public
+app.use(express.static(path.join(__dirname, "public")));
+
 
 database();
 
@@ -30,5 +37,5 @@ app.use("/routes", authRoutes);
 
 
 app.listen(PORT, () => {
-   console.log("Server is running on port 8000");
+  console.log("Server is running on port 8000");
 });
