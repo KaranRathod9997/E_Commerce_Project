@@ -74,7 +74,7 @@ const productSchema = new mongoose.Schema(
       trim: true,
     },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    
+    image:{type:String}
   },
   // { timestamps: true }
 );

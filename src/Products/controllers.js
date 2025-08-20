@@ -91,6 +91,11 @@ const addNewProduct = async (req, res) => {
 
     const user_id = req.user.id;
     // console.log(user_id);
+     // multer gives uploaded file in req.file
+        let imagePath = "";
+        if (req.file) {
+            imagePath = "/products/" + req.file.filename; // save only relative path
+        }
 
     const user = await User.findById(user_id);
         const {
@@ -103,6 +108,7 @@ const addNewProduct = async (req, res) => {
             discount_data,
             color,
             desc,
+            
         } = req.body;
 
         // Manual validation before hitting MongoDB
@@ -121,7 +127,8 @@ const addNewProduct = async (req, res) => {
                 discount_data,
                 color,
                 desc,
-                user:user_id
+                user:user_id,
+                image:imagePath
             });
             user.product.push(newProduct.id)
             await user.save()
