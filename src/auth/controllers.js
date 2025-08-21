@@ -1,8 +1,14 @@
 const User = require("../Users/model");
+const { USERROLE } = require("../Users/const");
+// const { validate } = require("../Users/validations");
 
 // Register a new user
 const register = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password , roles} = req.body;
+
+  if (roles === USERROLE.ADMIN && req.session.user?.role !== USERROLE.ADMIN) {
+  return res.status(403).json({ msg: "Only admins can create another admin" });
+}
 
   // Validate input
   if (!username || !email || !password) {

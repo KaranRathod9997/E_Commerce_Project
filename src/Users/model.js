@@ -1,4 +1,6 @@
+// user.js
 const mongoose = require('mongoose');
+const { USERROLE } = require('./const');
 
 // User Schema Definition
 const userSchema = new mongoose.Schema(
@@ -10,7 +12,6 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minlength: [3, 'Username must be at least 3 characters long'],
       maxlength: [20, 'Username cannot exceed 20 characters'],
-      match: [/^[a-zA-Z0-9]+$/, 'Username must contain only letters and numbers'],
     },
 
     email: {
@@ -19,25 +20,25 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      match: [
-        /^\S+@\S+\.\S+$/,
-        'Please enter a valid email address (example@example.com)',
-      ],
     },
 
     password: {
       type: String,
       required: [true, 'Password is required'],
-      minlength: [6, 'Password must be at least 6 characters long'],
-      // select: false, //  Commented out if you want password to be visible in queries (optional)
     },
-    product: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }]
+
+    product: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+
+    roles: {
+      type: Number,
+      enum: [USERROLE.ADMIN, USERROLE.BUYER, USERROLE.SELLER],
+      default: USERROLE.BUYER
+    }
   },
   {
-    timestamps: true, // createdAt and updatedAt will be added automatically
+    timestamps: true,
   }
 );
 
-// Export Model
 const User = mongoose.model('User', userSchema);
 module.exports = User;

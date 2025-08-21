@@ -35,7 +35,7 @@ const mongoose = require("mongoose");
 
 const fetchAllProducts = async (req, res) => {
     try {
-        const products = await Product.find().populate("user","username email"); // saare products la lo
+        const products = await Product.find().populate("user","username email"); 
 
         res.status(200).json({
             total: products.length,
@@ -50,7 +50,6 @@ const fetchAllProducts = async (req, res) => {
         });
     }
 };
-
 
 // * GET /products/:id *
 // * Fetch product by ID *
@@ -86,7 +85,7 @@ const fetchProductById = async (req, res) => {
 
 const addNewProduct = async (req, res) => {
     try {
-    //     console.log("req.body:", req.body);
+    // console.log("req.body:", req.body);
     // console.log("req file:", req.file);
 
     const user_id = req.user.id;
@@ -107,8 +106,7 @@ const addNewProduct = async (req, res) => {
             discount,
             discount_data,
             color,
-            desc,
-            
+            desc
         } = req.body;
 
         // Manual validation before hitting MongoDB
