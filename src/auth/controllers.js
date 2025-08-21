@@ -4,11 +4,11 @@ const { USERROLE } = require("../Users/const");
 
 // Register a new user
 const register = async (req, res) => {
-  const { username, email, password , roles} = req.body;
+  const { username, email, password, roles } = req.body;
 
   if (roles === USERROLE.ADMIN && req.session.user?.role !== USERROLE.ADMIN) {
-  return res.status(403).json({ msg: "Only admins can create another admin" });
-}
+    return res.status(403).json({ msg: "Only admins can create another admin" });
+  }
 
   // Validate input
   if (!username || !email || !password) {
@@ -34,7 +34,7 @@ const register = async (req, res) => {
 // Login using session
 const login = async (req, res) => {
   try {
-      if (!req.body) {
+    if (!req.body) {
       return res.status(400).json({ msg: "Missing request body" });
     }
     const { identifier, password } = req.body;
@@ -42,7 +42,7 @@ const login = async (req, res) => {
     const user = await User.findOne({
       $or: [{ email: identifier }, { username: identifier }],
     });
-
+    console.log(user);
     if (!user) return res.status(404).json({ msg: "User not found" });
     if (user.password !== password)
       return res.status(401).json({ msg: "Password incorrect" });
@@ -52,7 +52,9 @@ const login = async (req, res) => {
       id: user._id,
       username: user.username,
       email: user.email,
+      roles: user.roles, // ✅ important for createAdmin
     };
+
 
     return res.status(200).json({
       msg: "Login successful",
